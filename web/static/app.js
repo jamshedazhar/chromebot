@@ -91,45 +91,20 @@ document.addEventListener("DOMContentLoaded", function(event) {
   recognition.onresult = function(ev) {
     recognizedText = ev["results"][0][0]["transcript"];
     addUserItem(recognizedText);
-  // Query the text to api server 
-    var settings = {
-      "url": "https://api-inference.huggingface.co/models/gpt2",
-      "method": "POST",
-      "timeout": 0,
-      "headers": {
-        "Connection": "keep-alive",
-        "Pragma": "no-cache",
-        "Cache-Control": "no-cache",
-        "Origin": "https://huggingface.co",
-        "Sec-Fetch-Dest": "empty",
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36",
-        "Content-Type": "text/plain;charset=UTF-8",
-        "Accept": "*/*",
-        "Sec-Fetch-Site": "same-site",
-        "Sec-Fetch-Mode": "cors",
-        "Referer": "https://huggingface.co/gpt2?text="+recognizedText,
-        "Accept-Language": "en-US,en;q=0.9"
-      },
-      "data": "\""+recognizedText+"\""
-    };
-    $.ajax(settings).done(function (response) {
-      console.log(response);
-      var data = response[0].generated_text;
-      var timer = window.setTimeout(function() { startListening(); }, 5000);              
-      var msg = new SpeechSynthesisUtterance(data);
-      addBotItem(recognizedText);
-      msg.addEventListener("end", function(ev) {
-        window.clearTimeout(timer);
-        startListening();
-      });
-      msg.addEventListener("error", function(ev) {
-        window.clearTimeout(timer);
-        startListening();
-      });
+    var timer = window.setTimeout(function() { startListening(); }, 5000);              
+    var msg = new SpeechSynthesisUtterance(recognizedText);
+    addBotItem(recognizedText);
+    msg.addEventListener("end", function(ev) {
+      window.clearTimeout(timer);
+      startListening();
+    });
+    msg.addEventListener("error", function(ev) {
+      window.clearTimeout(timer);
+      startListening();
+    });
 
     window.speechSynthesis.speak(msg);
-
-    });
+  // Query the text to api server 
 //     $.ajax({
 //             type: 'POST',
 //             url: './api/',
