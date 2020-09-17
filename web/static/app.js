@@ -92,7 +92,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     recognizedText = ev["results"][0][0]["transcript"];
     addUserItem(recognizedText);
     var timer = window.setTimeout(function() { startListening(); }, 5000);              
-    var msg = new SpeechSynthesisUtterance(data);
+    var msg = new SpeechSynthesisUtterance(recognizedText);
     addBotItem(recognizedText);
     msg.addEventListener("end", function(ev) {
       window.clearTimeout(timer);
