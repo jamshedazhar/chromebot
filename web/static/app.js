@@ -76,7 +76,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
   }
   // Initial feedback message.
   const initMessage = "Hi! I’m voicebot. Tap the microphone and start talking to me."
-  alert("Press OK to continue");
 
   addBotItem(initMessage);
   window.speechSynthesis.speak(new SpeechSynthesisUtterance(initMessage));
@@ -92,32 +91,45 @@ document.addEventListener("DOMContentLoaded", function(event) {
   recognition.onresult = function(ev) {
     recognizedText = ev["results"][0][0]["transcript"];
     addUserItem(recognizedText);
-  // Query the text to api server 
-    $.ajax({
-            type: 'POST',
-            url: './api/',
-            contentType: "application/json",
-            data: JSON.stringify({"text": recognizedText}),
-            success: function(data){
-                        // Set a timer just in case. so if there was an error speaking or whatever, there will at least be a prompt to continue
-                        var timer = window.setTimeout(function() { startListening(); }, 5000);
-                  
-                        var msg = new SpeechSynthesisUtterance(data);
-                        addBotItem(data);
-                        
-                        msg.addEventListener("end", function(ev) {
-                          window.clearTimeout(timer);
-                          startListening();
-                        });
-
-                        msg.addEventListener("error", function(ev) {
-                          window.clearTimeout(timer);
-                          startListening();
-                        });
+    var timer = window.setTimeout(function() { startListening(); }, 5000);              
+    var msg = new SpeechSynthesisUtterance(data);
+    addBotItem(recognizedText);
+    msg.addEventListener("end", function(ev) {
+      window.clearTimeout(timer);
+      startListening();
+    });
+    msg.addEventListener("error", function(ev) {
+      window.clearTimeout(timer);
+      startListening();
+    });
 
                         window.speechSynthesis.speak(msg);
-                     }
-      });
+  // Query the text to api server 
+//     $.ajax({
+//             type: 'POST',
+//             url: './api/',
+//             contentType: "application/json",
+//             data: JSON.stringify({"text": recognizedText}),
+//             success: function(data){
+//                         // Set a timer just in case. so if there was an error speaking or whatever, there will at least be a prompt to continue
+//                         var timer = window.setTimeout(function() { startListening(); }, 5000);
+                  
+//                         var msg = new SpeechSynthesisUtterance(data);
+//                         addBotItem(data);
+                        
+//                         msg.addEventListener("end", function(ev) {
+//                           window.clearTimeout(timer);
+//                           startListening();
+//                         });
+
+//                         msg.addEventListener("error", function(ev) {
+//                           window.clearTimeout(timer);
+//                           startListening();
+//                         });
+
+//                         window.speechSynthesis.speak(msg);
+//                      }
+//       });
   };
 
   recognition.onerror = function(ev) {
