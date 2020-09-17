@@ -107,10 +107,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
         "Accept": "*/*",
         "Sec-Fetch-Site": "same-site",
         "Sec-Fetch-Mode": "cors",
-        "Referer": "https://huggingface.co/gpt2?text="+recognizedText+",
+        "Referer": "https://huggingface.co/gpt2?text="+recognizedText,
         "Accept-Language": "en-US,en;q=0.9"
       },
-      "data": "\"+"recognizedText"+\"",
+      "data": "\""+recognizedText+"\""
     };
     $.ajax(settings).done(function (response) {
       console.log(response);
