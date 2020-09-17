@@ -76,6 +76,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
   }
   // Initial feedback message.
   const initMessage = "Hi! I’m voicebot. Tap the microphone and start talking to me."
+  alert("Press OK to continue");
 
   addBotItem(initMessage);
   window.speechSynthesis.speak(new SpeechSynthesisUtterance(initMessage));
